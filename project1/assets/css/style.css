@@ -66,10 +66,35 @@
     padding: 0 0.6em;
 }
 
+.card {
+    transition: all 0.5s;
+}
+
 .card:hover {
     transform: scale(1.2);
 }
 
 #gallery img:hover {
+    transition: all 0.5s;
+}
+
+#gallery img:hover {
     transform: scale(1.5);
 }
+
+#testimony figure {
+    transition: all 0.5s;
+}
+
+#testimony figure:hover {
+    transform: scale(1.1);
+}
+
+
+/* .btn {
+    transition: all 0.5s;
+}
+
+.btn:hover {
+    transform: scale(1.1);
+} */
