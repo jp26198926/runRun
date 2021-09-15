@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>runRUN</title>
+    <link rel="stylesheet" type="text/css" href="./assets/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bad+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+
+</head>
+
+<body>
+    <nav class="navbar shadow">
+        <div class="container-fluid">
+            <a href="./index.html" class="navbar-brand mb-2 mb-sm-0 mx-auto mx-sm-0">
+                <img src="./assets/img/logo.png" width="50px" />runRun
+            </a>
+
+            <div id="progress" class="d-flex my-1 mx-auto mx-sm-0">
+
+            </div>
+
+            <form class="d-flex justify-content-center mx-auto mx-lg-0">
+                <button id="btn-new" type="button" class="btn btn-success ms-2" data-bs-toggle="modal" data-bs-target="#modalNew">New Game</button>
+                <button id="btn-howto" type="button" class="btn btn-success ms-2" data-bs-toggle="modal" data-bs-target="#modalInfo">How to Play</button>
+                <button id="btn-about" type="button" class="btn btn-success ms-2" data-bs-toggle="modal" data-bs-target="#modalInfo">About</button>
+                <button id="btn-settings" type="button" class="btn btn-success ms-2" data-bs-toggle="modal" data-bs-target="#modalSettings">Settings</button>
+            </form>
+        </div>
+    </nav>
+
+    <main>
+        <div class="row">
+            <div id="field" class="col-md-12">
+
+            </div>
+        </div>
+    </main>
+
+    <!-- components -->
+    <!-- Modal Info -->
+    <div class="modal fade" id="modalInfo" tabindex="-1" aria-labelledby="modalInfoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title text-success" id="modalInfoLabel">Modal Info</h5>
+                </div>
+                <div class="modal-body">
+                    <!-- data here will be populate from JS -->
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" id="btn-info-close" class="btn btn-success  " data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Settings -->
+    <div class="modal fade" id="modalSettings" tabindex="-1" aria-labelledby="modalSettingsLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title text-success" id="modalSettingsLabel">Settings</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 mx-auto ">
+                            <div id="switchSound" class="form-check form-switch">
+                                <input id="chkSound" class="form-check-input" type="checkbox" id="switchSound">
+                                <label class="form-check-label" for="switchSound">Sound</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal New -->
+    <div class="modal fade" id="modalNew" tabindex="-1" aria-labelledby="modalNewLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title text-success" id="modalNewLabel">New Game</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="characterList row row-cols-1 row-cols-md-4 g-4">
+                        <!-- data here will be populate from JS -->
+                    </div>
+                </div>
+
+                <div class="modal-footer d-flex justify-content-center">
+                    <button id="btn-start" type="button" class="btn btn-success">Start</button>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./assets/js/bootstrap.bundle.min.js"></script>
+    <script src="./assets/js/script.js"></script>
+</body>
+
+</html>
