@@ -44,15 +44,26 @@ body {
 
 .modal-content {
     background-color: rgba(255, 255, 255, 0.8);
+    border: none;
 }
 
-#modalInfo img {
-    width: 5em;
+#modalCountdown .modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.1) !important;
 }
 
+#modalCountdown .modal-content {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+#modalInfo img{
+    width: 3em;
+}
 #modalNew img {
     width: 5em;
 }
+
+
+
 
 #field {
     position: relative;
@@ -66,4 +77,24 @@ body {
 #field img {
     height: 100px;
     position: relative;
+}
+
+
+
+/* copied code from google and modified */
+#countDown { 
+    position:fixed;   
+    z-index: 999999;
+    top: 40vh;
+    left: 45vw;    
+    text-align: center;
+}
+
+@keyframes count {
+    0% { transform: scale(1.5); }
+    100% { transform: scale(1); }
+}
+
+.nums {    
+    animation: count 0.1s cubic-bezier(0.1,0.1,1,1) 1;    
 }

@@ -3,12 +3,16 @@ const modalInfo = new bootstrap.Modal(document.getElementById('modalInfo'));
 const modalInfoLabel = document.querySelector('#modalInfoLabel');
 const modalInfoBody = document.querySelector('#modalInfo .modal-body');
 const btnInfoClose = document.querySelector('#btn-info-close');
+const btnInfoReplay = document.querySelector('#btn-info-replay');
 
 //Modal New
 const modalNew = new bootstrap.Modal(document.getElementById('modalNew'));
 const modalNewLabel = document.querySelector('#modalNewLabel');
 const modalNewBody = document.querySelector('#modalNew .modal-body .characterList');
 const btn_start = document.querySelector('#btn-start');
+
+// Countdown
+const countDown = document.querySelector('#countDown');
 
 //Modal Settings
 const switchSound = document.querySelector('#switchSound');
@@ -23,6 +27,7 @@ const btn_settings = document.querySelector('#btn-settings');
 //field
 const field = document.querySelector('#field');
 const progress = document.querySelector('#progress');
+let isCurrentlyPlaying = false;
 
 let players = []; //will hold the current players in the field
 let ranks = []; //will hold the ranking of the current play
@@ -39,17 +44,21 @@ const hello_audio = new Audio("./assets/sfx/hello.mp3");
 const congrats_audio = new Audio("./assets/sfx/congrats.mp3");
 const congrats2_audio = new Audio("./assets/sfx/congrats2.mp3");
 
-Audio.prototype.start = function() {
-    this.pause();
-    this.currentTime = 0;
-    this.loop = true;
-    this.play();
+Audio.prototype.start = function () {
+    if (soundOn) {
+        this.pause();
+        this.currentTime = 0;
+        this.loop = true;
+        this.play();
+    }
 };
 
-Audio.prototype.start_once = function() {
-    this.pause();
-    this.currentTime = 0;
-    this.play();
+Audio.prototype.start_once = function () {
+    if (soundOn) {
+        this.pause();
+        this.currentTime = 0;
+        this.play();
+    }    
 };
 
 Audio.prototype.stop = function() {
@@ -60,10 +69,19 @@ Audio.prototype.stop = function() {
 switchSound.addEventListener('click', () => {
     if (chkSound.checked) {
         soundOn = true;
-        bg_audio.start();
+
+        //check if currently in playing
+        if (isCurrentlyPlaying) {
+            play_audio.start(); //play playing music
+        } else {
+            bg_audio.start(); //play background music
+        }
+        
     } else {
         soundOn = false;
         bg_audio.stop();
+        play_audio.stop();
+        congrats2_audio.stop();
     }
 });
 
@@ -109,7 +127,7 @@ function getCharacterList() {
                         <div class="card-body">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="switchOnPlayer${characterNumber}">
-                                <label class="form-check-label" for="switchOnPlayer${characterNumber}">Use this Character</label>
+                                <label class="form-check-label d-sm-none d-xl-block" for="switchOnPlayer${characterNumber}">Use this Character</label>
                             </div>
                             <input type="text" id="txtPlayerName${characterNumber}" class="form-control mb-2" placeholder="Enter Name" value="Player ${characterNumber}" disabled />
                             
@@ -149,8 +167,8 @@ function setSwitchClickEvent(characterNumber) {
             const txtPlayerName = document.querySelector('#txtPlayerName' + characterNumber);
             const imgNewImage = document.querySelector('#imgNewImage' + characterNumber);
 
-            if (txtPlayerName.disabled) { //if textbox is disabled meaning the switch is off
-                txtPlayerName.disabled = false;
+            if (txtPlayerName.disabled) { //if textbox is disabled meaning the switch is off then it will enable
+                txtPlayerName.disabled = false; //remove disable attribute to textbox
                 imgNewImage.src = `./assets/img/player${characterNumber}.gif`; //animated image
 
                 if (soundOn) { //if sound is ON, add sound effects when selecting a player
@@ -198,8 +216,8 @@ document.addEventListener('click', e => {
             if (!playerName.disabled) { //if textbox is NOT disabled then add to players array
 
                 if (playerName.value) {
-                    player.push(playerName.value, i, 0); //i - character number; 0 - is the current steps
-                    players.push(player); //push to the global players array only if they enable the player name
+                    player.push(playerName.value, i, 0); //i - character number; 0 - is the current step
+                    players.push(player); //push to the global players array only if they enable the player w/ name
                 } else {
                     alert(`Error: Please Provide a Name for Player ${i}.`);
                     error = true;
@@ -214,8 +232,7 @@ document.addEventListener('click', e => {
 
             if (!error) { //if no error then deploy
                 deployPlayers(); //plot the players to the field
-                modalNew.hide(); //hide the new modal window
-                btn_new.disabled = true; //disable the new button
+                modalNew.hide(); //hide the new modal window                
             }
 
         } else {
@@ -285,7 +302,8 @@ function playersProgress() {
 
     progress.innerHTML = characters; //deploy to the field
 
-    if (ranks.length == players.length) { //check if all players are done.
+    if (ranks.length >= players.length) { //check if all players are done.
+        isCurrentlyPlaying = false;
         btn_new.disabled = false; //enable the new button
         play_audio.stop(); //stop the play sound
         displayResult();
@@ -298,7 +316,11 @@ function setPlayersProgress(meters, characterIndex) {
 }
 
 function deployPlayers() {
-    let characters = ''; //variable to hold  the characters
+    isCurrentlyPlaying = true;
+    ranks = []; //clear ranks
+    btn_new.disabled = true; //disable the new button
+
+    let characters = ''; //variable to hold  the characters    
 
     players.forEach((player, index) => {
 
@@ -320,16 +342,13 @@ function deployPlayers() {
 
     field.innerHTML = characters; //deploy to the field
 
+    showCountDown(); //show countdown
+    
     setTimeout(() => {
-
-        if (soundOn) {
-            bg_audio.stop();
-            play_audio.start();
-        }
-
+        bg_audio.stop();
+        play_audio.start();
         play();
-    }, 100);
-
+    }, 4000);
 }
 
 function play() {
@@ -413,6 +432,8 @@ function displayResult() {
 
     modalInfoLabel.textContent = `Congratulations!!!`;
     modalInfoBody.innerHTML = gameResult;
+    btnInfoReplay.classList.remove('d-none');
+    btnInfoReplay.classList.add('d-block');
     modalInfo.show();
 
     if (soundOn) { //check if sound is on
@@ -422,14 +443,83 @@ function displayResult() {
     }
 }
 
+btnInfoReplay.addEventListener('click', () => {
+    //hide the replay button after click
+    btnInfoReplay.classList.remove('d-block');
+    btnInfoReplay.classList.add('d-none');
+    
+    congrats2_audio.stop();
+    bg_audio.start();
+    
+    deployPlayers(); //restart the game
+});
+
 btnInfoClose.addEventListener('click', () => {
-    if (soundOn) {
-        congrats2_audio.stop();
+    congrats2_audio.stop();
+    
+    if (soundOn) {        
         bg_audio.start();
     }
-
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    btn_about.click();
+    btn_about.click();    
 });
+
+function showCountDown() {
+    countDown.innerHTML = '';
+    countDown.style.transition = "none";
+    countDown.style.opacity = 100;
+    countDown.classList.remove('d-none');
+    countDown.classList.add('d-block');
+
+    countDownFunction( countDown, function(){    
+        countDown.innerHTML = '<p class="nums">Go!</p>';
+
+        //hide the countdown after 1 second 
+        setTimeout(() => {
+            
+            countDown.style.opacity = 0;
+            countDown.style.transition = "all 5s";
+        }, 1000);
+    });
+}
+
+//copied code and modified from: https://stackoverflow.com/questions/50190639/trying-to-create-a-numeric-3-2-1-countdown-with-javascript-and-css
+function countDownFunction( parent, callback ){  
+  // This is the function we will call every 1000 ms using setInterval  
+  function count(){
+    if( paragraph ){      
+      // Remove the paragraph if there is one
+      paragraph.remove();
+    }
+
+    if( texts.length === 0 ){      
+      // If we ran out of text, use the callback to get started
+      // Also, remove the interval
+      // Also, return since we dont want this function to run anymore.
+      clearInterval( interval );
+      callback();
+      return;
+    }  
+    // Get the first item of the array out of the array.
+    // Your array is now one item shorter.
+    var text = texts.shift();  
+    // Create a paragraph to add to the DOM
+    // This new paragraph will trigger an animation
+    paragraph = document.createElement("p");
+    paragraph.textContent = text;
+    paragraph.className = text + " nums";
+
+    parent.appendChild( paragraph );
+  }
+  
+  // These are all the text we want to display
+  var texts = ['Three', 'Two', 'One'];  
+  // This will store the paragraph we are currently displaying
+  var paragraph = null;  
+  // Initiate an interval, but store it in a variable so we can remove it later.
+  var interval = setInterval( count, 1000 );
+}
+
+

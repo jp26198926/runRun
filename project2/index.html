@@ -35,11 +35,15 @@
     </nav>
 
     <main>
+        <!-- Countdown-->
+        <div id="countDown" class="text-success display-1 d-flex justify-content-center align-items-center" >
+        </div>
+
         <div class="row">
             <div id="field" class="col-md-12">
 
             </div>
-        </div>
+        </div>        
     </main>
 
     <!-- components -->
@@ -54,7 +58,8 @@
                     <!-- data here will be populate from JS -->
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" id="btn-info-close" class="btn btn-success  " data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btn-info-replay" class="btn btn-success d-none " data-bs-dismiss="modal">Replay</button>  
+                    <button type="button" id="btn-info-close" class="btn btn-success  " data-bs-dismiss="modal">Close</button>                    
                 </div>
             </div>
         </div>
@@ -107,6 +112,9 @@
             </div>
         </div>
     </div>
+
+    
+    
 
     <script src="./assets/js/bootstrap.bundle.min.js"></script>
     <script src="./assets/js/script.js"></script>
